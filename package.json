@@ -1,0 +1,19 @@
+{
+  "name": "sdc-qanda",
+  "version": "1.0.0",
+  "description": "System Design Capstone - API service that supports the FEC Front End Requests",
+  "main": "MongoDB.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rfp2204-fs-sdc5-rebel-alliance/SDC-QandA.git"
+  },
+  "author": "Alex Krut",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rfp2204-fs-sdc5-rebel-alliance/SDC-QandA/issues"
+  },
+  "homepage": "https://github.com/rfp2204-fs-sdc5-rebel-alliance/SDC-QandA#readme"
+}
