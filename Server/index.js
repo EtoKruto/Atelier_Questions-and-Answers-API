@@ -1,0 +1,20 @@
+const express = require('express');
+require('dotenv').config();
+// const path = require('path');
+// const bodyParser = require('body-parser');
+// const router = require('./routes.js');
+
+const app = express();
+const port = process.env.S_PORT;
+
+// Logging and parsing
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// Router
+// app.use(router);
+
+// Set up what we are listening on
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
