@@ -13,14 +13,5 @@ module.exports = {
   //     })
 
   // }
-  getAll: (req, res) => {
-    db.pool.query('SELECT * FROM questions WHERE id = 2')
-    .then((data) => {
-      console. log('data in models', data.rows)
-      .catch((err) => {
-        console.log('error in models', err)
-      })
-    })
-
-  }
+  // getAll:
 };
