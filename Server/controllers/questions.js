@@ -6,75 +6,83 @@ require("dotenv").config();
 module.exports = {
   // Retrieves a list of questions for a particular product. This list does not include any reported questions.
   getQuestions: async (req, res) => {
-    // console.log('get answers - req.query', req.query)
-    // console.log('get answers - req.params', req.params)
-    // console.log('req.params.question_id', req.params.question_id)
-    const { id, page = 1, count = 5 } = req.query;
-    // const id = req.query.question_id;
-    console.log('id', id);
-    console.log('page', page);
-    console.log('count', count);
+    try {
+    const { id, page = 0, count = 5 } = req.query;
     const allQIDs = await pool.query(
-      `SELECT
-      questions.id AS question_id,
-      questions.body AS question_body,
-      questions.date_written AS question_date,
-      questions.asker_name AS asker_name,
-      questions.asker_email AS asker_email,
-      questions.helpful AS question_helpfulness,
-      questions.reported AS reported
+      `SELECT questions.product_id,
+      (
+        SELECT JSON_AGG(
+          JSON_BUILD_OBJECT(
+            'question_id',questions.id,
+            'question_body', questions.body,
+            'question_date', questions.date_written,
+            'asker_name', questions.asker_name,
+            'asker_email', questions.asker_email,
+            'question_helpfulness', questions.helpful,
+            'reported', questions.reported,
 
+            'answers', (
+              SELECT
+                COALESCE(
+                  JSON_OBJECT_AGG(
+                    answers.id, (
+                      SELECT
+                        JSON_BUILD_OBJECT(
+                          'id', answers.id,
+                          'body', answers.body,
+                          'date', answers.date_written,
+                          'answerer_name', answers.answerer_name,
+                          'answerer_email', answers.answerer_email,
+                          'helpfulness', answers.helpful,
+                          'photos', (
+                            SELECT COALESCE(JSON_AGG(ROW_TO_JSON(photo)),'[]')
+                            FROM (
+                              SELECT id, url
+                              FROM photos
+                              WHERE photos.answer_id = answers.id
+                            ) AS photo
+                          )
+                        )
+                    )
+                  ),'{}')
+                FROM (
+                  SELECT *
+                  FROM answers
+                  WHERE answers.question_id = question_id
+                  ORDER BY helpful
+                  LIMIT 2
+                ) AS answers
+            )
+          )
+        )
+      ) AS results
       FROM questions
-      LEFT JOIN answers ON answers.question_id = questions.id
-      WHERE (product_id = $1)
-      GROUP BY questions.id
+      WHERE questions.product_id = $1
+      GROUP BY questions.product_id
       OFFSET $2
       LIMIT $3
       `,
       [id, page, count])
       if (allQIDs.err) {
-        console.log('err.stack', allQIDs.err)
+        throw ('err.stack', allQIDs.err)
       } else {
-        // console.log('allQIDs.rows', allQIDs.rows)
+      res.send(allQIDs.rows[0])
       }
-      // let getUserPormises = [];
-      // for (const question of allQIDs.rows) {
-      //   getUserPormises.push(
-      //     pool.query(
-      //       'SELECT *\
-      //       FROM answers\
-      //       WHERE (question_id = $1 AND reported = FALSE)',
-      //       [question.id])
-      //       )
-      //     }
-      // console.log('allQIDs', allQIDs)
-
-      let questionList = {
-        product_id: id,
-        page: page,
-        count: count,
-        results: allQIDs.rows
-      }
-      console.log('questionList', questionList)
-
-      res.send(questionList)
+    } catch (error) {
+      res.sendStatus(404)
+    }
     },
 
     // Returns answers for a given question. This list does not include any reported answers.
     getAnswers: async (req, res) => {
-      // console.log('get answers - req.query', req.query)
-      // console.log('get answers - req.params', req.params)
-      // console.log('req.params.question_id', req.params.question_id)
+      try {
       const { page = 1, count = 5 } = req.query;
       const id = req.params.question_id;
-      // console.log('id', id);
-      // console.log('page', page);
-      // console.log('count', count);
       const allAnswers = await pool.query(
         `SELECT
         answers.id as answer_id,
         body,
-        date_written as date,
+        to_char(to_timestamp(date_written / 1000), 'yyyy-MM-dd"T"00:00:00.000Z') as date,
         answerer_name,
         answerer_email,
         helpful as helpfulness,
@@ -100,11 +108,8 @@ module.exports = {
         `,
         [id, page, count])
         if (allAnswers.err) {
-          console.log('err.stack', allAnswers.err)
+          throw ('err.stack', allAnswers.err)
         } else {
-          console.log('allAnswers.rows', allAnswers.rows)
-        }
-
         const answersList = {
           question: id,
           page: page,
@@ -112,6 +117,10 @@ module.exports = {
           results: allAnswers.rows
         }
         res.send(answersList)
+      }
+    } catch (error) {
+      res.sendStatus(404)
+    }
       },
 
       // Updates a question to show it was found helpful
@@ -122,14 +131,14 @@ module.exports = {
           const helpfulQByID = await pool.query(queryStringSelect,
             [question_id])
             if (helpfulQByID.err) {
-              console.log('err.stack', helpfulQByID.err)
+              throw ('err.stack', helpfulQByID.err)
             } else {
               helpfulQByID.rows[0].helpful+=1
               const queryArgs =  [helpfulQByID.rows[0].helpful, question_id];
               let queryStringUpdate = 'UPDATE questions SET helpful = $1 WHERE id = $2'
               const confirmed = await pool.query(queryStringUpdate,queryArgs)
               if (confirmed.err) {
-                console.log('err.stack', confirmed.err)
+                throw ('err.stack', confirmed.err)
               } else {
                 res.sendStatus(204)
               }
@@ -147,7 +156,7 @@ module.exports = {
               let queryStringUpdate = 'UPDATE questions SET reported = TRUE WHERE id = $1'
               const confirmed = await pool.query(queryStringUpdate,queryArgs)
               if (confirmed.err) {
-                console.log('err.stack', confirmed.err)
+                throw ('err.stack', confirmed.err)
               } else {
                 res.sendStatus(204)
             }
@@ -158,7 +167,6 @@ module.exports = {
 
         //Adds a question for the given product
         addQuestion: async function (req, res) {
-
           try {
             const { body, name, email, product_id} = req.body;
             const queryArgs =  [body, name, email, product_id];
@@ -167,7 +175,7 @@ module.exports = {
                 VALUES ($1, $2, $3, $4)`
                 const confirmed = await pool.query(queryStringAdd, queryArgs)
                 if (confirmed.err) {
-                  console.log('err.stack', confirmed.err)
+                  throw ('err.stack', confirmed.err)
                 } else {
                   res.sendStatus(201)
               }
@@ -175,11 +183,9 @@ module.exports = {
               res.sendStatus(404)
             }
         },
+
         // Adds an answer for the given question
         addAnswer: async function (req, res) {
-          // console.log('get answers - req.query', req.query)
-          // console.log('get answers - req.params', req.params)
-          // console.log('get answers - req.body', req.body)
           try {
             const {question_id} = req.params;
             const { body, name, email, photos} = req.body;
@@ -190,7 +196,7 @@ module.exports = {
                 RETURNING *`
                 const confirmed = await pool.query(queryStringAdd, queryArgs)
                 if (confirmed.err) {
-                  console.log('err.stack', confirmed.err)
+                  throw ('err.stack', confirmed.err)
                 } else {
                   res.sendStatus(201)
               }
