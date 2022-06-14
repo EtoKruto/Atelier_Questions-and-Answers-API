@@ -1,4 +1,3 @@
-// var models = require('../models/index.js');
 var { pool } = require('../db/index.js');
 
 require("dotenv").config();
@@ -206,3 +205,12 @@ module.exports = {
             }
       }
     };
+
+
+
+
+    // not using
+    // var models = require('../models/index.js');
+      // console.log ('req.body', req.body)
+      // console.log ('req.params', req.params)
+      // console.log ('req.query', req.query)

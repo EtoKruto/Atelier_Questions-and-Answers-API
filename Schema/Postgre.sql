@@ -47,13 +47,8 @@ CREATE INDEX answer_id_index on answers (question_id)
 CREATE INDEX photo_id_index on photos (answer_id);
 CREATE INDEX question_id_index on questions (product_id);
 
--- IMPORT .SQL RUN FILE TO CREATE TABLES
--- /Users/admin/Documents/School_Documents/Online_Classes/Hack_Reactor/GIT_REPOS/GROUP_PROJECTS/SDC/Data/answers_photos.csv
--- /Users/admin/Documents/School_Documents/Online_Classes/Hack_Reactor/GIT_REPOS/GROUP_PROJECTS/SDC/Data/answers.csv
--- /Users/admin/Documents/School_Documents/Online_Classes/Hack_Reactor/GIT_REPOS/GROUP_PROJECTS/SDC/Data/questions.csv
+-- COPY questions FROM '/Users/admin/Documents/School_Documents/Online_Classes/Hack_Reactor/GIT_REPOS/GROUP_PROJECTS/SDC/Data/questions.csv' DELIMITER ',' CSV Header;
 
-COPY questions FROM '/Users/admin/Documents/School_Documents/Online_Classes/Hack_Reactor/GIT_REPOS/GROUP_PROJECTS/SDC/Data/questions.csv' DELIMITER ',' CSV Header;
+-- COPY answers FROM '/Users/admin/Documents/School_Documents/Online_Classes/Hack_Reactor/GIT_REPOS/GROUP_PROJECTS/SDC/Data/answers.csv' DELIMITER ',' CSV Header;
 
-COPY answers FROM '/Users/admin/Documents/School_Documents/Online_Classes/Hack_Reactor/GIT_REPOS/GROUP_PROJECTS/SDC/Data/answers.csv' DELIMITER ',' CSV Header;
-
-COPY photos FROM '/Users/admin/Documents/School_Documents/Online_Classes/Hack_Reactor/GIT_REPOS/GROUP_PROJECTS/SDC/Data/answers_photos.csv' DELIMITER ',' CSV Header;
+-- COPY photos FROM '/Users/admin/Documents/School_Documents/Online_Classes/Hack_Reactor/GIT_REPOS/GROUP_PROJECTS/SDC/Data/answers_photos.csv' DELIMITER ',' CSV Header;
