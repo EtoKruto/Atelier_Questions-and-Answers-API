@@ -66,7 +66,7 @@ module.exports = {
       if (allQIDs.err) {
         throw ('err.stack', allQIDs.err)
       } else {
-      res.send(allQIDs.rows[0])
+      res.status(200).send(allQIDs.rows[0])
       }
     } catch (error) {
       res.sendStatus(404)
@@ -76,7 +76,7 @@ module.exports = {
     // Returns answers for a given question. This list does not include any reported answers.
     getAnswers: async (req, res) => {
       try {
-      const { page = 1, count = 5 } = req.query;
+      const { page = 0, count = 5 } = req.query;
       const id = req.params.question_id;
       const allAnswers = await pool.query(
         `SELECT
@@ -116,7 +116,7 @@ module.exports = {
           count: count,
           results: allAnswers.rows
         }
-        res.send(answersList)
+        res.status(200).send(answersList)
       }
     } catch (error) {
       res.sendStatus(404)
@@ -170,7 +170,7 @@ module.exports = {
           try {
             const { body, name, email, product_id} = req.body;
             const queryArgs =  [body, name, email, product_id];
-                let queryStringAdd =
+                const queryStringAdd =
                 `INSERT INTO questions(body, asker_name, asker_email, product_id)
                 VALUES ($1, $2, $3, $4)`
                 const confirmed = await pool.query(queryStringAdd, queryArgs)
@@ -193,8 +193,9 @@ module.exports = {
                 let queryStringAdd =
                 `INSERT INTO answers(body, answerer_name, answerer_email, question_id)
                 VALUES ($1, $2, $3, $4)
-                RETURNING *`
+                RETURNING id`
                 const confirmed = await pool.query(queryStringAdd, queryArgs)
+                // console.log(confirmed.rows[0].id)
                 if (confirmed.err) {
                   throw ('err.stack', confirmed.err)
                 } else {

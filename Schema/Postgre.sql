@@ -15,6 +15,8 @@ CREATE TABLE questions (
   "helpful" INT
 );
 
+
+
 DROP TABLE IF EXISTS answers CASCADE;
 CREATE TABLE answers (
   "id" SERIAL PRIMARY KEY,
@@ -28,6 +30,7 @@ CREATE TABLE answers (
   FOREIGN KEY ("question_id") REFERENCES "questions" ("id")
 );
 
+
 DROP TABLE IF EXISTS photos CASCADE;
 CREATE TABLE photos (
   "id" SERIAL PRIMARY KEY,
@@ -36,9 +39,13 @@ CREATE TABLE photos (
   FOREIGN KEY ("answer_id") REFERENCES "answers" ("id")
 );
 
--- ALTER TABLE "answers" ADD FOREIGN KEY ("question_id") REFERENCES "questions" ("id");
--- ALTER TABLE "photos" ADD FOREIGN KEY ("answer_id") REFERENCES "answers" ("id");
+DROP INDEX IF EXISTS answer_id_index;
+DROP INDEX IF EXISTS photo_id_index;
+DROP INDEX IF EXISTS question_id_index;
 
+CREATE INDEX answer_id_index on answers (question_id)
+CREATE INDEX photo_id_index on photos (answer_id);
+CREATE INDEX question_id_index on questions (product_id);
 
 -- IMPORT .SQL RUN FILE TO CREATE TABLES
 -- /Users/admin/Documents/School_Documents/Online_Classes/Hack_Reactor/GIT_REPOS/GROUP_PROJECTS/SDC/Data/answers_photos.csv
