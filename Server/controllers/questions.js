@@ -1,6 +1,6 @@
 var { pool } = require('../db/index.js');
 
-require("dotenv").config();
+require('dotenv').config({ path: 'file.env' });
 
 module.exports = {
   // Retrieves a list of questions for a particular product. This list does not include any reported questions.

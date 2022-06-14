@@ -1,8 +1,6 @@
 // var models = require('../models/index.js');
 var { pool } = require('../db/index.js');
 
-require("dotenv").config();
-
 
 module.exports = {
   // Updates a question to show it was found helpful
