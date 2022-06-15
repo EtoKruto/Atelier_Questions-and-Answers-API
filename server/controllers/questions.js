@@ -20,7 +20,7 @@ module.exports = {
 
             'answers', (
               SELECT
-                COALESCE(
+
                   JSON_OBJECT_AGG(
                     answers.id, (
                       SELECT
@@ -41,12 +41,11 @@ module.exports = {
                           )
                         )
                     )
-                  ),'{}')
+                  )
                 FROM (
                   SELECT *
                   FROM answers
                   WHERE answers.question_id = question_id
-                  ORDER BY helpful
                   LIMIT 2
                 ) AS answers
             )
@@ -192,7 +191,6 @@ module.exports = {
                 VALUES ($1, $2, $3, $4)
                 RETURNING id`
                 const confirmed = await pool.query(queryStringAdd, queryArgs)
-                // console.log(confirmed.rows[0].id)
                 if (confirmed.err) {
                   throw ('err.stack', confirmed.err)
                 } else {

@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(router);
 app.use('/', router);
 
-app.get(`${process.env.LOADER}`, (req, res) => {
+app.get(`/${process.env.LOADER}`, (req, res) => {
   res.send(`${process.env.LOADER}`);
 });
 

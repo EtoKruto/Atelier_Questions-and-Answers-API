@@ -39,13 +39,13 @@ CREATE TABLE photos (
   FOREIGN KEY ("answer_id") REFERENCES "answers" ("id")
 );
 
+DROP INDEX IF EXISTS question_id_index;
 DROP INDEX IF EXISTS answer_id_index;
 DROP INDEX IF EXISTS photo_id_index;
-DROP INDEX IF EXISTS question_id_index;
 
+CREATE INDEX question_id_index on questions (product_id);
 CREATE INDEX answer_id_index on answers (question_id)
 CREATE INDEX photo_id_index on photos (answer_id);
-CREATE INDEX question_id_index on questions (product_id);
 
 -- COPY questions FROM '/Users/admin/Documents/School_Documents/Online_Classes/Hack_Reactor/GIT_REPOS/GROUP_PROJECTS/SDC/Data/questions.csv' DELIMITER ',' CSV Header;
 
