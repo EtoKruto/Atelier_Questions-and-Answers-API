@@ -1,6 +1,6 @@
 const express = require('express');
 var db = require('./db/index.js');
-require('dotenv').config({ path: 'file.env' });
+require('dotenv').config({ path: './../../file.env' });
 // const path = require('path');
 // const bodyParser = require('body-parser');
 // const router = require('./routes.js');
