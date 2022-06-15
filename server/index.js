@@ -1,7 +1,7 @@
 const express = require('express');
 var db = require('./db/index.js');
 const path = require('path')
-require('dotenv').config({ path: path.resolve(__dirname, './../file.env') })
+require('dotenv').config({ path: path.resolve(__dirname, '../file.env') })
 // const path = require('path');
 // const bodyParser = require('body-parser');
 // const router = require('./routes.js');
@@ -24,6 +24,9 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(router);
 app.use('/', router);
 
+app.get(`${process.env.LOADER}`, (req, res) => {
+  res.send(`${process.env.LOADER}`);
+});
 
 // Set up what we are listening on
 app.listen(port, () => {
