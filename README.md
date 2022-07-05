@@ -75,28 +75,30 @@ NGINX rerouting or additional query isntances were not immitated locally for the
 
 ** BACK-END - Design**
 
-The backend uses several EC2 Instances on AWS which currently may not be running. Five (5) Instances have been created for this project: \
-1. Database Instance to host PostreSQL server \
-2-4. Three Query instances to route incoming requests (Copy of Server file in this repo) \
-5. NGINX Proxy Instance to route traffic among the 3 server Instances \
+The backend uses several EC2 Instances on AWS which currently may not be running. Five (5) Instances have been created for this project:
+- One - database Instance to host PostreSQL server
+- Three - Query instances to route incoming requests (Copy of Server file in this repo)
+- One - NGINX Proxy Instance to route traffic among the 3 server Instances
 
 ## Technologies Used
-Setup and Configuration \
+Setup and Configuration: Git, NPM, Babel, and Webpack \
 ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white)
 ![NPM](https://img.shields.io/badge/NPM-%23000000.svg?style=for-the-badge&logo=npm&logoColor=white)
 ![Babel](https://img.shields.io/badge/Babel-F9DC3e?style=for-the-badge&logo=babel&logoColor=black)
 ![Webpack](https://img.shields.io/badge/webpack-%238DD6F9.svg?style=for-the-badge&logo=webpack&logoColor=black)
 
-Front End Development : Javascript, React.js, Axios, HTML, CSS \
+Front End Development : Javascript, React, HTML, CSS \
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
-Back End Development and Database: Node.js, Express.js, PostgreSQL \
+
+Back End Development and Database: Node.js, Express.js, PostgreSQL, Axios \
 ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 ![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![axios](https://img.shields.io/badge/axios-HTTP%20client-purple)
 
 Deployment, Optimization & Testing: AWS EC2, Ubuntu, PostreSQL Analyze, Loader.io, K6, NGINX, GZIP \
 ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)
@@ -108,7 +110,7 @@ Deployment, Optimization & Testing: AWS EC2, Ubuntu, PostreSQL Analyze, Loader.i
 ![GZIP](https://img.shields.io/badge/GZIP-Compression-green)
 
 
-Team Collaboration: \
+Team Collaboration: Trello, Slack and Zoom \
 ![Trello](https://img.shields.io/badge/Trello-%23026AA7.svg?style=for-the-badge&logo=Trello&logoColor=white)
 ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
 ![Zoom](https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=zoom&logoColor=white)
